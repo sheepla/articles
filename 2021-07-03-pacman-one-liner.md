@@ -1,4 +1,4 @@
-# pacmanワンライナーで快適パッケージ管理
+# pacman(+fzf)ワンライナーで快適パッケージ管理
 
 
 
@@ -14,7 +14,7 @@
 
 - インストール済みのパッケージについて、名前のみをすべて表示: `pacman -Qq`
 - 明示的にインストールしたもののみ表示: `pacman -Qeq`
-- インストール済みのパッケージのうち、アップグレード可能なものを検索: `pacman -Qq`
+- インストール済みのパッケージのうち、アップグレード可能なものを検索: `pacman -Quq`
 
 
 
@@ -49,12 +49,14 @@ sudo pacman -S fzf
 
 ### パッケージの情報をリアルタイムプレビュー
 
+fzfはプレビューウインドウ機能を備えており、
+
 ```bash
 # インストール済みのパッケージを検索する場合
 pacman -Qq [キーワード...] | fzf --preview 'LANG=C pacman -Qi {}' --bind 'enter:execute(pacman -Qi {} | less)'
 
 # リモートのパッケージデータベースからパッケージを検索する場合
-pacman -Ssq キーワード... | fzf --preview 'pacman -Si {}' --bind 'enter:execute(LANG=C pacman -Si {} | less)'
+pacman -Ssq キーワード... | fzf --preview 'LANG=C pacman -Si {}' --bind 'enter:execute(LANG=C pacman -Si {} | less)'
 ```
 
 #### 使い方
@@ -84,9 +86,9 @@ pacman -Ssq キーワード... | fzf --preview 'pacman -Si {}' --bind 'enter:exe
 
 ```bash
 # インストール
-pacman -Ssq [キーワード...] | fzf --multi --preview 'pacman -Si {}' | sudo pacman -S -
+pacman -Ssq [キーワード...] | fzf --multi --preview 'LANG=C pacman -Si {}' | sudo pacman -S -
 # アンインストール
-pacman -Qq [キーワード...] | fzf --multi --preview 'pacman -Qi {}' | sudo pacman -Rn -
+pacman -Qq [キーワード...] | fzf --multi --preview 'LANG=C pacman -Qi {}' | sudo pacman -Rn -
 ```
 
 #### 使い方
@@ -99,3 +101,9 @@ pacman -Qq [キーワード...] | fzf --multi --preview 'pacman -Qi {}' | sudo p
 - `sudo pacman -R パッケージ名`: パッケージをアンインストールします。`-S` 同様、引数に `-` を与えると、標準入力から受け取ったテキストをパッケージ名と解釈してそのパッケージをアンインストールします。任意のパッケージを再帰的に削除するには `sudo pacman -Rns` を使います。
 
 - `fzf --multi`: fzfが起動した状態で `Tab` キーを押下することで、複数の項目を選択することができます。
+
+## 参考
+
+- [Arch Wiki - Pacmanヒント](https://wiki.archlinux.jp/index.php/Pacman_%E3%83%92%E3%83%B3%E3%83%88)
+
+- [Arch Wiki -Fzf](https://wiki.archlinux.jp/index.php/Fzf#Arch_.E3.81.A7_fzf_.E3.82.92.E4.BD.BF.E7.94.A8.E3.81.99.E3.82.8B)
